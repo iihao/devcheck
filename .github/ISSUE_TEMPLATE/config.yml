@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Question / usage help
+    url: https://github.com/iihao/devcheck/discussions
+    about: Ask anything about usage, ports, or macOS behavior.

@@ -1,0 +1,92 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version (without leading v)"
+        required: true
+        default: "0.1.0"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toolchain
+        run: swift --version
+
+      - name: Test
+        run: swift test
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build universal app
+        env:
+          UNIVERSAL: "1"
+          ZIP: "1"
+          VERSION: ${{ steps.version.outputs.value }}
+        run: ./scripts/bundle.sh
+
+      - name: Smoke test (CLI)
+        run: |
+          ./dist/DevCheck.app/Contents/MacOS/DevCheck --version
+          ./dist/DevCheck.app/Contents/MacOS/DevCheck ports --no-probe | head -5
+
+      # 可选：正式分发前启用 Developer ID 签名 + 公证，
+      # 否则用户首次打开会被 Gatekeeper 拦（右键打开可绕过）。
+      # - name: Import certificate
+      #   env:
+      #     CERT_P12: ${{ secrets.DEVELOPER_ID_P12 }}
+      #     CERT_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
+      #   run: ...
+      #
+      # - name: Notarize
+      #   env:
+      #     APPLE_ID: ${{ secrets.APPLE_ID }}
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #     APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+      #   run: |
+      #     ditto -c -k --keepParent dist/DevCheck.app notarize.zip
+      #     xcrun notarytool submit notarize.zip --apple-id "$APPLE_ID" \
+      #       --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait
+      #     xcrun stapler staple dist/DevCheck.app
+      #     rm -rf dist/DevCheck.zip
+      #     (cd dist && ditto -c -k --keepParent DevCheck.app "DevCheck-$VERSION.zip")
+
+      - name: Checksum
+        run: shasum -a 256 dist/DevCheck-*.zip | tee dist/checksums.txt
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/DevCheck-*.zip
+            dist/checksums.txt
+          draft: false
+          generate_release_notes: true
+          body: |
+            ## Install
+
+            ```bash
+            brew install --cask iihao/tap/devcheck
+            ```
+
+            Or download `DevCheck-${{ steps.version.outputs.value }}.zip` below, unzip, move to `/Applications`.
+
+            > The build is ad-hoc signed. On first launch use **Right-click → Open** (or `xattr -dr com.apple.quarantine /Applications/DevCheck.app`).
+
+            Requires macOS 14+. Universal binary (Apple Silicon + Intel).
