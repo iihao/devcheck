@@ -90,6 +90,7 @@ jobs:
 
             Or download `DevCheck-${{ steps.version.outputs.value }}.zip` below, unzip, move to `/Applications`.
 
-            > The build is ad-hoc signed. On first launch use **Right-click → Open** (or `xattr -dr com.apple.quarantine /Applications/DevCheck.app`).
+            > The build is ad-hoc signed (no Developer ID yet). macOS quarantines it, so clear the flag once:
+            > `xattr -dr com.apple.quarantine /Applications/DevCheck.app`
 
             Requires macOS 14+. Universal binary (Apple Silicon + Intel).

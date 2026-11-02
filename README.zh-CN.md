@@ -42,10 +42,18 @@ DevCheck 一次回答三个问题：**谁在监听、它属于哪个项目、我
 ## 安装
 
 ```bash
-brew install --cask iihao/tap/devcheck   # 首个 release 后可用
+brew install --cask iihao/tap/devcheck
+# 构建是 ad-hoc 签名（暂无 Developer ID），首次启动前清一次隔离标记：
+xattr -dr com.apple.quarantine /Applications/DevCheck.app
 ```
 
-当前可直接从源码跑：
+或者一行搞定，不用 Homebrew：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/iihao/devcheck/main/scripts/install.sh | bash
+```
+
+从源码跑：
 
 ```bash
 git clone https://github.com/iihao/devcheck.git
