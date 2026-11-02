@@ -16,16 +16,28 @@ APP="dist/${NAME}.app"
 UNIVERSAL="${UNIVERSAL:-0}"
 ZIP="${ZIP:-0}"
 
-BUILD_ARGS=(-c release)
 if [[ "$UNIVERSAL" == "1" ]]; then
-  BUILD_ARGS+=(--arch arm64 --arch x86_64)
-  echo "==> swift build -c release（通用二进制）"
+  # 不用 `swift build --arch arm64 --arch x86_64`：该模式在 CI 上会触发
+  # SwiftDriver 的 "missing target configuration" 报错。改为分别构建再 lipo 合并。
+  echo "==> swift build -c release --arch arm64"
+  swift build -c release --arch arm64 --scratch-path .build/arm64
+  ARM_BIN="$(swift build -c release --arch arm64 --scratch-path .build/arm64 --show-bin-path)/devcheck"
+
+  echo "==> swift build -c release --arch x86_64"
+  swift build -c release --arch x86_64 --scratch-path .build/x86
+  X86_BIN="$(swift build -c release --arch x86_64 --scratch-path .build/x86 --show-bin-path)/devcheck"
+
+  STAGE="$(mktemp -d)"
+  trap 'rm -rf "$STAGE"' EXIT
+  echo "==> lipo 合并为通用二进制"
+  lipo -create "$ARM_BIN" "$X86_BIN" -output "$STAGE/devcheck"
+  lipo -info "$STAGE/devcheck"
+  BIN="$STAGE/devcheck"
 else
   echo "==> swift build -c release"
+  swift build -c release
+  BIN="$(swift build -c release --show-bin-path)/devcheck"
 fi
-
-swift build "${BUILD_ARGS[@]}"
-BIN="$(swift build "${BUILD_ARGS[@]}" --show-bin-path)/devcheck"
 
 if [[ ! -x "$BIN" ]]; then
   echo "未找到可执行文件：$BIN" >&2
