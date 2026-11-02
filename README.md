@@ -1,5 +1,9 @@
 # DevCheck
 
+<p align="center">
+  <img src="docs/icon.png" width="128" alt="DevCheck icon">
+</p>
+
 **Menu bar port map for macOS.** See who's on `:3000`, which project it belongs to, and why your server won't start — without `sudo`, without telemetry, in ~3 seconds.
 
 <p align="center">

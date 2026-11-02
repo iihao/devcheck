@@ -1,5 +1,9 @@
 # DevCheck · 工程机体检 + 端口地图
 
+<p align="center">
+  <img src="docs/icon.png" width="128" alt="DevCheck icon">
+</p>
+
 **给 Mac 开发者的一块端口地图**：菜单栏一眼看清谁在占 `:3000`、它属于哪个项目、以及你的服务为什么起不来。**不需要 sudo、不需要特殊权限、不联网、3 秒出结果。**
 
 <p align="center">
