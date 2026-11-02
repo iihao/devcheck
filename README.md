@@ -43,10 +43,18 @@ DevCheck answers three questions at once: **what is listening, which project doe
 ## Install
 
 ```bash
-brew install --cask iihao/tap/devcheck   # coming with the first release
+brew install --cask iihao/tap/devcheck
+# ad-hoc signed (no Developer ID yet) — clear the quarantine flag once:
+xattr -dr com.apple.quarantine /Applications/DevCheck.app
 ```
 
-Build from source (works today, one command):
+Or one line, no Homebrew needed:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/iihao/devcheck/main/scripts/install.sh | bash
+```
+
+Build from source:
 
 ```bash
 git clone https://github.com/iihao/devcheck.git

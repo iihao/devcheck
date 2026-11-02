@@ -9,9 +9,16 @@ cask "devcheck" do
   desc "Menu bar port map: who is holding :3000, and which project it belongs to"
   homepage "https://github.com/iihao/devcheck"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "DevCheck.app"
+
+  caveats <<~EOS
+    DevCheck is ad-hoc signed (no Apple Developer ID yet), so macOS marks the
+    download as quarantined and refuses to launch it. Clear the flag once:
+
+      xattr -dr com.apple.quarantine /Applications/DevCheck.app
+  EOS
 
   zap trash: [
     "~/Library/Preferences/local.devcheck.plist",
