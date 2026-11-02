@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a capability or a better default
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: Describe the situation, not the solution. "I can't tell which container owns :5432" beats "add a docker column".
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints (see CONTRIBUTING)
+      options:
+        - label: This can be done without sudo / privileged helpers
+        - label: This can be done without new third-party dependencies
+        - label: This can be done without network access

@@ -1,0 +1,42 @@
+name: Bug report
+description: Something is wrong with the port map, the classifier, or the menu bar
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The fastest way to get a useful fix: include the raw evidence.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you expect, and what did you get?
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `devcheck doctor`
+      description: Redact paths/usernames if needed.
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: devcheck version
+      placeholder: "devcheck 0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: macOS version + chip
+      placeholder: "macOS 15.2, M2 Pro"
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Screenshots, `lsof -nP -iTCP -sTCP:LISTEN | head -20`, related issues.
