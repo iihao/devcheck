@@ -1,4 +1,5 @@
 .build/
 .build/*/
+build/
 dist/
 .DS_Store

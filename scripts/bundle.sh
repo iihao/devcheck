@@ -11,7 +11,7 @@ cd "$(dirname "$0")/.."
 
 NAME="DevCheck"
 BUNDLE_ID="local.devcheck"
-VERSION="${VERSION:-0.1.0}"
+VERSION="${VERSION:-0.1.1}"
 APP="dist/${NAME}.app"
 UNIVERSAL="${UNIVERSAL:-0}"
 ZIP="${ZIP:-0}"
@@ -49,6 +49,13 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/${NAME}"
 
+# 图标（由 scripts/make-icon.sh 生成，仓库里带的是成品）
+if [[ -f Resources/AppIcon.icns ]]; then
+  cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+else
+  echo "  ! 缺少 Resources/AppIcon.icns（先跑 ./scripts/make-icon.sh）"
+fi
+
 cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -70,6 +77,8 @@ cat > "$APP/Contents/Info.plist" <<PLIST
     <string>${VERSION}</string>
     <key>LSMinimumSystemVersion</key>
     <string>14.0</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <!-- 只在菜单栏运行，不显示 Dock 图标 -->
     <key>LSUIElement</key>
     <true/>
