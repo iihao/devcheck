@@ -9,7 +9,7 @@
 DevCheck is a menu bar port map for macOS: it shows **who holds each port**, **which project it belongs to**, and **what to do about it** — no `sudo`, no telemetry, ~3 seconds.
 
 <p align="center">
-  <a href="https://github.com/iihao/devcheck/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/devcheck?color=blue"></a>
+  <a href="https://github.com/iihao/port-map/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/port-map?color=blue"></a>
   <img alt="platform" src="https://img.shields.io/badge/macOS-14%2B-black">
   <img alt="swift" src="https://img.shields.io/badge/Swift-6-orange">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-green">
@@ -18,6 +18,10 @@ DevCheck is a menu bar port map for macOS: it shows **who holds each port**, **w
 
 <p align="center">
   <img src="docs/demo-cli.gif" alt="devcheck why 5000" width="900">
+</p>
+
+<p align="center">
+  <code>brew install --cask iihao/tap/devcheck</code> · <a href="#install">other options</a>
 </p>
 
 > Bilingual: the CLI and menu bar follow your `LANG` (`DEVCHECK_LANG=en|zh` to force).
@@ -57,13 +61,13 @@ xattr -dr com.apple.quarantine /Applications/DevCheck.app
 Or one line, no Homebrew needed:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/iihao/devcheck/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/iihao/port-map/main/scripts/install.sh | bash
 ```
 
 Build from source:
 
 ```bash
-git clone https://github.com/iihao/devcheck.git
+git clone https://github.com/iihao/port-map.git
 cd devcheck
 swift build -c release
 ./scripts/bundle.sh && open dist/DevCheck.app
