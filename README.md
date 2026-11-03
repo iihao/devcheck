@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/demo.svg" alt="devcheck why 5000" width="820">
+  <img src="docs/demo-cli.gif" alt="devcheck why 5000" width="900">
 </p>
 
 > Bilingual: the CLI and menu bar follow your `LANG` (`DEVCHECK_LANG=en|zh` to force).
@@ -105,6 +105,10 @@ devcheck menu            # render the menu bar content as text
   ● 6379  redis-server  PID 1634  [brew]
 ```
 </details>
+
+<p align="center">
+  <img src="docs/menubar.png" width="440" alt="DevCheck menu bar">
+</p>
 
 ## Why not just `lsof`?
 

@@ -87,7 +87,30 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         // 调试/截图用：DEVCHECK_OPEN_MENU=1 启动后自动展开菜单
         if ProcessInfo.processInfo.environment["DEVCHECK_OPEN_MENU"] == "1" {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-                self?.statusItem.button?.performClick(nil)
+                guard let self else { return }
+                NSApp.activate(ignoringOtherApps: true)
+
+                func log(_ text: String) {
+                    FileHandle.standardError.write(Data((text + "\n").utf8))
+                }
+
+                NotificationCenter.default.addObserver(
+                    forName: NSMenu.didBeginTrackingNotification,
+                    object: self.menu,
+                    queue: .main
+                ) { _ in log("DEVCHECK_DIAG menu did begin tracking") }
+
+                self.statusItem.button?.performClick(nil)
+                log("DEVCHECK_DIAG performClick done highlighted=\(self.statusItem.button?.isHighlighted ?? false)")
+
+                // 把菜单窗口的真实位置打出来，录屏脚本据此计算录制区域
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                    for window in NSApp.windows where String(describing: type(of: window)).contains("Menu") {
+                        let screen = window.screen?.frame ?? .zero
+                        let line = "DEVCHECK_MENU_FRAME x=\(Int(window.frame.minX)) y=\(Int(window.frame.minY)) w=\(Int(window.frame.width)) h=\(Int(window.frame.height)) screenW=\(Int(screen.width)) screenH=\(Int(screen.height))\n"
+                        FileHandle.standardError.write(Data(line.utf8))
+                    }
+                }
             }
         }
     }
@@ -135,6 +158,17 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     func menuWillOpen(_ menu: NSMenu) {
         isMenuOpen = true
         refresh()
+
+        guard ProcessInfo.processInfo.environment["DEVCHECK_OPEN_MENU"] == "1" else { return }
+        func log(_ text: String) {
+            FileHandle.standardError.write(Data((text + "\n").utf8))
+        }
+        if let button = statusItem.button, let window = button.window {
+            log("DEVCHECK_DIAG button window frame=\(window.frame) screen=\(window.screen?.frame ?? .zero)")
+        }
+        for window in NSApp.windows {
+            log("DEVCHECK_DIAG window \(type(of: window)) frame=\(window.frame) visible=\(window.isVisible)")
+        }
     }
 
     func menuDidClose(_ menu: NSMenu) {
