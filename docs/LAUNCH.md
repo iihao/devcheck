@@ -1,6 +1,6 @@
 # 发布作战手册（可直接执行）
 
-> 现状：仓库 `iihao/port-map`，v0.1.1 已发布，通用二进制 + cask + install.sh 可用，中英 README + GIF + social preview 就绪。
+> 现状：仓库 `iihao/devcheck`，v0.1.1 已发布，通用二进制 + cask + install.sh 可用，中英 README + GIF + social preview 就绪。
 > **唯一的阻塞是：还没有任何一次对外曝光。**
 
 ## 0. 上线前最后 2 件事
@@ -58,7 +58,7 @@ Zero dependencies, zero privileges (no sudo, no root helper), no network I/O.
 
   brew install --cask iihao/tap/devcheck     # needs one xattr, see README
 
-https://github.com/iihao/port-map
+https://github.com/iihao/devcheck
 
 Happy to hear which ports it misclassifies on your machine — the classifier was
 the hard part (Homebrew's own .git, Xcode's python3 living inside Python.app).
@@ -100,7 +100,7 @@ the hard part (Homebrew's own .git, Xcode's python3 living inside Python.app).
 
 菜单栏常驻，能直接开浏览器 / 复制地址 / Finder 定位 / 结束进程（二次确认）。
 
-GitHub: https://github.com/iihao/port-map
+GitHub: https://github.com/iihao/devcheck
 brew install --cask iihao/tap/devcheck
 
 还没公证（差个 Apple Developer 账号），首次启动要跑一次：
@@ -133,7 +133,7 @@ and how to turn it off.
 No sudo, no privileged helper, no network calls, zero third-party dependencies.
 MIT, universal binary, macOS 14+.
 
-https://github.com/iihao/port-map
+https://github.com/iihao/devcheck
 ```
 
 ---
@@ -149,7 +149,7 @@ $ devcheck why 5000
   5000 是 macOS 的 AirPlay 接收器 —— 去系统设置关掉，或者换 5001
 
 菜单栏工具，不需要 sudo，不联网，MIT，零依赖。
-开源了 👉 github.com/iihao/port-map
+开源了 👉 github.com/iihao/devcheck
 ```
 
 **英文版（同一条线程置顶）**：
@@ -161,7 +161,7 @@ $ devcheck why 5000
 → that's macOS AirPlay Receiver. Turn it off, or use 5001.
 
 Menu bar port map. No sudo, no telemetry, zero deps, MIT.
-github.com/iihao/port-map
+github.com/iihao/devcheck
 ```
 
 ---
@@ -184,7 +184,7 @@ github.com/iihao/port-map
 - [ ] 每一条评论 30 分钟内回复（HN 排序机制）
 - [ ] issue 当天回应，哪怕是 "reproduced, thanks"
 - [ ] 有人报分类错误 → 当天修，发 v0.1.2，在原帖补一条 "updated: fixed X"
-- [ ] 看 `gh api repos/iihao/port-map/traffic/views` 确认流量来源
+- [ ] 看 `gh api repos/iihao/devcheck/traffic/views` 确认流量来源
 - [ ] 记录下载量 / star 比值（< 10% 说明 star 是友情 star）
 
 ---

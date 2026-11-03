@@ -104,7 +104,7 @@ for keyword in ["AirPlay Receiver", "5001"] {
 attributed.draw(at: NSPoint(x: 120, y: 172))
 
 // 右下角：一句话愿景
-draw("github.com/iihao/port-map", font: NSFont.monospacedSystemFont(ofSize: 20, weight: .medium),
+draw("github.com/iihao/devcheck", font: NSFont.monospacedSystemFont(ofSize: 20, weight: .medium),
      color: blue, at: NSPoint(x: 120, y: 96))
 
 NSGraphicsContext.restoreGraphicsState()
