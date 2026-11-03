@@ -4,7 +4,9 @@
   <img src="docs/icon.png" width="128" alt="DevCheck icon">
 </p>
 
-**给 Mac 开发者的一块端口地图**：菜单栏一眼看清谁在占 `:3000`、它属于哪个项目、以及你的服务为什么起不来。**不需要 sudo、不需要特殊权限、不联网、3 秒出结果。**
+**5000 被 macOS 的 AirPlay 悄悄占着，3000 是你三天前忘了关的 dev server。**
+
+DevCheck 是一张 Mac 菜单栏端口地图：**谁在占端口**、**它属于哪个项目**、**该怎么处理** —— 不需要 sudo、不联网、3 秒出结果。
 
 <p align="center">
   <a href="https://github.com/iihao/devcheck/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/devcheck?color=blue"></a>

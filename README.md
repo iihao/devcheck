@@ -4,7 +4,9 @@
   <img src="docs/icon.png" width="128" alt="DevCheck icon">
 </p>
 
-**Menu bar port map for macOS.** See who's on `:3000`, which project it belongs to, and why your server won't start — without `sudo`, without telemetry, in ~3 seconds.
+**Port 5000 is silently taken by macOS AirPlay. Port 3000 is held by a dev server you forgot about.**
+
+DevCheck is a menu bar port map for macOS: it shows **who holds each port**, **which project it belongs to**, and **what to do about it** — no `sudo`, no telemetry, ~3 seconds.
 
 <p align="center">
   <a href="https://github.com/iihao/devcheck/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/devcheck?color=blue"></a>
