@@ -197,3 +197,19 @@ github.com/iihao/devcheck
 - 被 awesome list 收录：长期 **1–3/天**
 
 **5k+ 需要运气**：要么正好命中"AirPlay 占 5000"的公共讨论，要么被大 V 转发。功能多少不是决定因素。
+---
+
+## 9. 分发渠道状态（2026-11-03 提交）
+
+| 渠道 | 规模 | 形式 | 状态 | 备注 |
+|---|---|---|---|---|
+| [jaywcjlove/awesome-mac](https://github.com/jaywcjlove/awesome-mac/issues/4184) | 112k | issue | 🟡 待审 | 该列表用 issue 收录，不用 PR |
+| [HelloGitHub](https://github.com/521xueweihan/HelloGitHub/issues/4227) | 186k | issue | 🟡 待审 | 月刊，可能下期收录 |
+| [阮一峰周刊](https://github.com/ruanyf/weekly/issues/13035) | 107k | issue | 🟡 待审 | 每周五发刊，作者挑选 |
+| [open-source-mac-os-apps](https://github.com/serhii-londar/open-source-mac-os-apps/pull/1947) | 51k | PR | 🟡 待审 | 改了 `applications.json`，CI 会跑链接检查 |
+| [iCHAIT/awesome-macOS](https://github.com/iCHAIT/awesome-macOS/issues/1341) | 19k | issue | 🟡 待审 | 仓库设了 `collaborators_only`，外人不允许 PR |
+| [awesome-cli-apps](https://github.com/agarrharr/awesome-cli-apps) | 20k | PR | ⏳ 2027-02 再提 | 硬门槛：**>20 star 且项目满 3 个月** |
+| [chinese-independent-developer](https://github.com/1c7/chinese-independent-developer) | 62k | PR | ❌ 不适合 | 规则明确写「不能是开发者工具」 |
+| [awesome-macos-command-line](https://github.com/herrbischoff/awesome-macos-command-line) | 31k | — | ❌ 不收 | 仓库已于 2026-03 归档 |
+
+**跟进节奏**：列表审核通常 1–4 周，被合并/收录前不要重复提交。awesome-cli-apps 到 2027-02 且 star > 20 后再提一次。
