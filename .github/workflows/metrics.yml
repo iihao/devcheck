@@ -19,6 +19,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify token can read traffic API
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          # traffic 端点要求 push 权限。这里显式检查，避免每周期的 403 被当成"0 流量"。
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/traffic/views")
+          echo "traffic/views → HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::warning::traffic API 返回 $code，采样会写入 0。请配置带 repo 权限的 METRICS_TOKEN。"
+          fi
+
       - name: Sample traffic / stars / downloads
         env:
           # traffic 端点需要 push 权限；contents: write 足够。
