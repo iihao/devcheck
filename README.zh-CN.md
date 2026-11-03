@@ -9,7 +9,7 @@
 DevCheck 是一张 Mac 菜单栏端口地图：**谁在占端口**、**它属于哪个项目**、**该怎么处理** —— 不需要 sudo、不联网、3 秒出结果。
 
 <p align="center">
-  <a href="https://github.com/iihao/port-map/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/port-map?color=blue"></a>
+  <a href="https://github.com/iihao/devcheck/releases"><img alt="release" src="https://img.shields.io/github/v/release/iihao/devcheck?color=blue"></a>
   <img alt="platform" src="https://img.shields.io/badge/macOS-14%2B-black">
   <img alt="swift" src="https://img.shields.io/badge/Swift-6-orange">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-green">
@@ -58,18 +58,17 @@ xattr -dr com.apple.quarantine /Applications/DevCheck.app
 ```
 
 会同时装好菜单栏 App 和 `devcheck` 命令行（已软链进 PATH）。
-仓库名叫 `port-map` 是为了好搜；命令和 App 名叫 `devcheck`。
 
 或者一行搞定，不用 Homebrew：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/iihao/port-map/main/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/iihao/devcheck/main/scripts/install.sh | bash
 ```
 
 从源码跑：
 
 ```bash
-git clone https://github.com/iihao/port-map.git
+git clone https://github.com/iihao/devcheck.git
 cd devcheck
 swift build -c release
 ./scripts/bundle.sh && open dist/DevCheck.app

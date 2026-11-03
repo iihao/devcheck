@@ -1,10 +1,10 @@
 #!/bin/bash
 # 一行安装（从 GitHub Releases 拉最新通用二进制）
 #
-#   curl -fsSL https://raw.githubusercontent.com/iihao/port-map/main/scripts/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/iihao/devcheck/main/scripts/install.sh | bash
 set -euo pipefail
 
-REPO="${DEVCHECK_REPO:-iihao/port-map}"
+REPO="${DEVCHECK_REPO:-iihao/devcheck}"
 DEST="${DEVCHECK_DEST:-/Applications}"
 
 say() { printf '%s\n' "$*"; }
