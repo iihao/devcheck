@@ -11,10 +11,10 @@
 | # | 事项 | 为什么 | 状态 |
 |---|---|---|---|
 | 1 | **CLI / 菜单英文输出（i18n）** | 国际用户看不懂中文输出，直接劝退。跟随 `LANG`，中文用户仍然看中文 | ✅ 已完成（`DEVCHECK_LANG` 可强制） |
-| 2 | **真实 GIF（10 秒内）** | README 有 3 秒看懂的画面，star 转化率提升最明显。目前只有 SVG 复刻 | ❌ 待录（需屏幕录制权限） |
-| 3 | **一条命令安装 + Gatekeeper 不拦** | `curl \| bash` 或 cask；未公证的包会让 80% 的人卡在"已损坏" | ⚠️ 脚本已备，需 Developer ID 公证 |
-| 4 | 仓库设置（description / topics / social preview） | 决定搜索和 Twitter 卡片的观感 | ⚠️ 见下方清单 |
-| 5 | 首个 Release + CHANGELOG | 有版本号才像"能用"，也才写得进 cask | ⚠️ workflow 已备 |
+| 2 | **真实 GIF（10 秒内）** | README 有 3 秒看懂的画面，star 转化率提升最明显 | ✅ 已完成 `docs/demo-cli.gif`（7s，中英各一） |
+| 3 | **一条命令安装 + Gatekeeper 不拦** | `curl \| bash` 或 cask；未公证的包会让 80% 的人卡在"已损坏" | ⚠️ cask + install.sh 已可用（带 xattr 提示），仍缺 Developer ID 公证 |
+| 4 | 仓库设置（description / topics / social preview） | 决定搜索和 Twitter 卡片的观感 | ⚠️ description + 10 topics 已设，social preview 仍待上传 |
+| 5 | 首个 Release + CHANGELOG | 有版本号才像"能用"，也才写得进 cask | ✅ v0.1.0 / v0.1.1 已发布（通用二进制） |
 
 ## 2. 命名
 

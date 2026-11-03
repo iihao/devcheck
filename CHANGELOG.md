@@ -1,6 +1,9 @@
 # Changelog
 
-## 0.1.1 — 2026-11-02
+## 0.1.1 — 2026-11-03
+
+- **Real demo assets** (screen recordings, not mockups): `docs/demo-cli.gif` (7s, en + zh) and `docs/menubar.png`
+- Capture tooling: `scripts/record-cli-demo.sh`, `scripts/record-demo.sh`, `scripts/mov-to-gif.swift` (AVFoundation + ImageIO, no ffmpeg)
 
 - **App icon**: generated from SF Symbols (`scripts/make-icon.sh`), full `.iconset` chain → `Resources/AppIcon.icns`
 - `scripts/bundle.sh` embeds the icon and sets `CFBundleIconFile`
