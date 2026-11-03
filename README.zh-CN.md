@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/demo.zh.svg" alt="devcheck why 5000" width="820">
+  <img src="docs/demo-cli.zh.gif" alt="devcheck why 5000" width="900">
 </p>
 
 > 中英双语：CLI 与菜单栏跟随系统语言，可用 `DEVCHECK_LANG=en|zh` 强制切换。
@@ -104,6 +104,10 @@ devcheck menu            # 把菜单栏内容渲染成文本
   ● 6379  redis-server  PID 1634  [brew]
 ```
 </details>
+
+<p align="center">
+  <img src="docs/menubar.zh.png" width="440" alt="DevCheck 菜单栏">
+</p>
 
 ## 为什么不用 `lsof` 就够了
 

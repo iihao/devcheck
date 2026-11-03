@@ -37,6 +37,17 @@ Look for the `good first issue` label. Typical ones:
 - Improve a table column width in the CLI output
 - Add a new `PortSource` regression case
 
+## Regenerating assets
+
+```bash
+./scripts/make-icon.sh              # App icon (SF Symbol → .icns)
+./scripts/record-cli-demo.sh en docs/demo-cli.gif    # CLI demo GIF
+./scripts/record-demo.sh en docs/menubar.gif         # menu bar recording
+```
+
+Both recording scripts need macOS **Screen Recording** permission; the CLI one also needs
+Terminal automation permission. They create their own windows/services and clean up after.
+
 ## Commit / PR
 
 - Conventional commits appreciated: `feat:`, `fix:`, `docs:`, `test:`, `refactor:`.
