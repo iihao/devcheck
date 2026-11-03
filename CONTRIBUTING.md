@@ -5,7 +5,7 @@ Thanks for helping. This project stays deliberately small: **no third-party depe
 ## Development
 
 ```bash
-git clone https://github.com/iihao/devcheck.git
+git clone https://github.com/iihao/port-map.git
 cd devcheck
 swift build          # compile
 swift test           # 30 tests, must stay green
