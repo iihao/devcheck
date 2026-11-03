@@ -29,15 +29,25 @@ REPO_FIELDS = ["date", "stars", "forks", "watchers", "downloads_zip", "downloads
 REFERRER_FIELDS = ["date", "referrer", "count", "uniques"]
 
 
-def gh_api(path: str, allow_fail: bool = False):
-    result = subprocess.run(
-        ["gh", "api", path], capture_output=True, text=True
-    )
-    if result.returncode != 0:
-        if allow_fail:
-            return None
-        raise SystemExit(f"gh api {path} failed: {result.stderr.strip()}")
-    return json.loads(result.stdout)
+def gh_api(path: str, allow_missing: bool = False):
+    """调用 gh api。
+
+    allow_missing=True 时，404（该端点还没有数据，例如 referrers）返回 None。
+    403 永远打印警告并返回 None —— 静默吞掉权限问题会导致采样永远为 0，
+    而 traffic 只有 14 天窗口，发现时数据已经丢了。
+    """
+    result = subprocess.run(["gh", "api", path], capture_output=True, text=True)
+    if result.returncode == 0:
+        return json.loads(result.stdout)
+
+    message = result.stderr.strip()
+    if "HTTP 403" in message:
+        print(f"WARN: 403 on {path} — token 缺少该仓库的 push 权限，数据不可用",
+              file=sys.stderr)
+        return None
+    if allow_missing and ("HTTP 404" in message or "Not Found" in message):
+        return None
+    raise SystemExit(f"gh api {path} failed: {message}")
 
 
 def detect_repo() -> str:
@@ -74,8 +84,8 @@ def merge_csv(path: Path, fieldnames: list[str], keys: list[str], rows: list[dic
 
 
 def sample_traffic(repo: str) -> list[dict]:
-    views = gh_api(f"repos/{repo}/traffic/views", allow_fail=True) or {"views": []}
-    clones = gh_api(f"repos/{repo}/traffic/clones", allow_fail=True) or {"clones": []}
+    views = gh_api(f"repos/{repo}/traffic/views", allow_missing=True) or {"views": []}
+    clones = gh_api(f"repos/{repo}/traffic/clones", allow_missing=True) or {"clones": []}
 
     by_date: dict[str, dict] = {}
     for entry in views.get("views", []):
@@ -101,7 +111,7 @@ def sample_traffic(repo: str) -> list[dict]:
 
 def sample_repo(repo: str) -> dict:
     info = gh_api(f"repos/{repo}")
-    releases = gh_api(f"repos/{repo}/releases", allow_fail=True) or []
+    releases = gh_api(f"repos/{repo}/releases", allow_missing=True) or []
 
     zip_downloads = 0
     total_downloads = 0
@@ -124,7 +134,7 @@ def sample_repo(repo: str) -> dict:
 
 def sample_referrers(repo: str) -> list[dict]:
     # 没有任何外部来源时 GitHub 返回 404，不是错误
-    data = gh_api(f"repos/{repo}/traffic/referrers", allow_fail=True) or []
+    data = gh_api(f"repos/{repo}/traffic/referrers", allow_missing=True) or []
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     return [
         {
