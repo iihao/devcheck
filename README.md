@@ -58,6 +58,9 @@ brew install --cask iihao/tap/devcheck
 xattr -dr com.apple.quarantine /Applications/DevCheck.app
 ```
 
+This installs both the menu bar app and the `devcheck` CLI (symlinked into PATH).
+The repo is named `port-map` for discoverability; the binary and app are `devcheck`.
+
 Or one line, no Homebrew needed:
 
 ```bash

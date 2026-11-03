@@ -57,6 +57,9 @@ brew install --cask iihao/tap/devcheck
 xattr -dr com.apple.quarantine /Applications/DevCheck.app
 ```
 
+会同时装好菜单栏 App 和 `devcheck` 命令行（已软链进 PATH）。
+仓库名叫 `port-map` 是为了好搜；命令和 App 名叫 `devcheck`。
+
 或者一行搞定，不用 Homebrew：
 
 ```bash

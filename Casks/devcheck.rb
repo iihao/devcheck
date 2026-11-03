@@ -13,6 +13,8 @@ cask "devcheck" do
 
   app "DevCheck.app"
 
+  binary "#{appdir}/DevCheck.app/Contents/MacOS/DevCheck"
+
   caveats <<~EOS
     DevCheck is ad-hoc signed (no Apple Developer ID yet), so macOS marks the
     download as quarantined and refuses to launch it. Clear the flag once:
