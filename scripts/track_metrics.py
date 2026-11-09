@@ -27,16 +27,20 @@ METRICS_DIR = Path("metrics")
 TRAFFIC_FIELDS = ["date", "views", "views_unique", "clones", "clones_unique"]
 REPO_FIELDS = ["date", "stars", "forks", "watchers", "downloads_zip", "downloads_total"]
 REFERRER_FIELDS = ["date", "referrer", "count", "uniques"]
+STAR_FIELDS = ["starred_at", "login"]
 
 
-def gh_api(path: str, allow_missing: bool = False):
+def gh_api(path: str, allow_missing: bool = False, headers: list[str] | None = None):
     """调用 gh api。
 
     allow_missing=True 时，404（该端点还没有数据，例如 referrers）返回 None。
     403 永远打印警告并返回 None —— 静默吞掉权限问题会导致采样永远为 0，
     而 traffic 只有 14 天窗口，发现时数据已经丢了。
     """
-    result = subprocess.run(["gh", "api", path], capture_output=True, text=True)
+    cmd = ["gh", "api", path]
+    for h in (headers or []):
+        cmd += ["-H", h]
+    result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
         return json.loads(result.stdout)
 
@@ -134,7 +138,7 @@ def sample_repo(repo: str) -> dict:
 
 def sample_referrers(repo: str) -> list[dict]:
     # 没有任何外部来源时 GitHub 返回 404，不是错误
-    data = gh_api(f"repos/{repo}/traffic/referrers", allow_missing=True) or []
+    data = gh_api(f"repos/{repo}/traffic/popular/referrers", allow_missing=True) or []
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     return [
         {
@@ -147,11 +151,30 @@ def sample_referrers(repo: str) -> list[dict]:
     ]
 
 
+def sample_stars(repo: str) -> list[dict]:
+    """记录每个 star 的精确时间。GitHub 不提供来源，但时间戳能和发布时刻对齐。"""
+    out = []
+    page = 1
+    while True:
+        data = gh_api(f"repos/{repo}/stargazers?per_page=100&page={page}",
+                      headers=["Accept: application/vnd.github.star+json"]) or []
+        if not data:
+            break
+        for row in data:
+            out.append({"starred_at": row.get("starred_at", ""),
+                        "login": (row.get("user") or {}).get("login", "")})
+        if len(data) < 100:
+            break
+        page += 1
+    return out
+
+
 def main() -> int:
     repo = detect_repo()
     traffic = sample_traffic(repo)
     repo_row = sample_repo(repo)
     referrers = sample_referrers(repo)
+    stars = sample_stars(repo)
 
     traffic_file = METRICS_DIR / "traffic.csv"
     repo_file = METRICS_DIR / "repo.csv"
@@ -160,12 +183,15 @@ def main() -> int:
     days = merge_csv(traffic_file, TRAFFIC_FIELDS, ["date"], traffic)
     merge_csv(repo_file, REPO_FIELDS, ["date"], [repo_row])
     refs = merge_csv(referrer_file, REFERRER_FIELDS, ["date", "referrer"], referrers)
+    star_file = METRICS_DIR / "stars.csv"
+    star_rows = merge_csv(star_file, STAR_FIELDS, ["login"], stars)
 
     print(f"repo: {repo}")
     print(f"traffic: {days} 天已记录 → {traffic_file}")
     print(f"stars={repo_row['stars']} forks={repo_row['forks']} "
           f"downloads(zip)={repo_row['downloads_zip']} → {repo_file}")
     print(f"referrers: {refs} 行 → {referrer_file}")
+    print(f"stars: {star_rows} 人 → {star_file}")
     return 0
 
 
