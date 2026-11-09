@@ -162,7 +162,7 @@ final class PortSourceTests: XCTestCase {
         XCTAssertTrue(ProjectResolver.isSharedRoot(URL(fileURLWithPath: "/opt/homebrew")))
         XCTAssertTrue(ProjectResolver.isSharedRoot(URL(fileURLWithPath: "/Users/example")))
         XCTAssertTrue(ProjectResolver.isSharedRoot(URL(fileURLWithPath: "/tmp")))
-        XCTAssertFalse(ProjectResolver.isSharedRoot(URL(fileURLWithPath: "/Users/example/Desktop/project/devcheck")))
+        XCTAssertFalse(ProjectResolver.isSharedRoot(URL(fileURLWithPath: "/Users/example/Projects/devcheck")))
     }
 }
 
