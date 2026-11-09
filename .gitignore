@@ -3,3 +3,6 @@
 build/
 dist/
 .DS_Store
+
+# 内部运营文档：只保留在本地
+docs/LAUNCH.md
