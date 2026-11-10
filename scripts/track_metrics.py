@@ -29,6 +29,39 @@ REPO_FIELDS = ["date", "stars", "forks", "watchers", "downloads_zip", "downloads
 REFERRER_FIELDS = ["date", "referrer", "count", "uniques"]
 STAR_FIELDS = ["starred_at", "login"]
 
+# shields.io 的 endpoint 徽章格式（README 里直接引这两个文件）
+BADGE_VISITORS = METRICS_DIR / "badge.json"
+BADGE_VIEWS = METRICS_DIR / "badge-views.json"
+
+
+def write_badges() -> tuple[int, int, int]:
+    """从 traffic.csv 汇总出两个徽章数字。
+
+    口径说明（重要）：
+      - 访客 = 每日 uniques 之和，是 GitHub 官方「按日去重」的独立访客；
+        你自己的刷新当天最多算 1 次，不会把数字刷爆。
+      - 浏览 = 原始 page views 之和，含重复访问。
+      两个数都不可能通过「自己多点几次」显著抬高，这是选官方 traffic 而不是
+      第三方计数器（hits.sh / visitorbadge）的原因。
+    """
+    path = METRICS_DIR / "traffic.csv"
+    views = uniques = days = 0
+    if path.exists():
+        with path.open(newline="") as handle:
+            for row in csv.DictReader(handle):
+                days += 1
+                views += int(row.get("views") or 0)
+                uniques += int(row.get("views_unique") or 0)
+
+    BADGE_VISITORS.parent.mkdir(parents=True, exist_ok=True)
+    BADGE_VISITORS.write_text(json.dumps(
+        {"schemaVersion": 1, "label": "visitors", "message": str(uniques),
+         "color": "8c1f28"}, ensure_ascii=False) + "\n")
+    BADGE_VIEWS.write_text(json.dumps(
+        {"schemaVersion": 1, "label": "page views", "message": str(views),
+         "color": "a8823c"}, ensure_ascii=False) + "\n")
+    return uniques, views, days
+
 
 def gh_api(path: str, allow_missing: bool = False, headers: list[str] | None = None):
     """调用 gh api。
@@ -185,9 +218,11 @@ def main() -> int:
     refs = merge_csv(referrer_file, REFERRER_FIELDS, ["date", "referrer"], referrers)
     star_file = METRICS_DIR / "stars.csv"
     star_rows = merge_csv(star_file, STAR_FIELDS, ["login"], stars)
+    uniques, views, days = write_badges()
 
     print(f"repo: {repo}")
     print(f"traffic: {days} 天已记录 → {traffic_file}")
+    print(f"累计 独立访客={uniques} 浏览量={views}（{days} 天）→ {BADGE_VISITORS}")
     print(f"stars={repo_row['stars']} forks={repo_row['forks']} "
           f"downloads(zip)={repo_row['downloads_zip']} → {repo_file}")
     print(f"referrers: {refs} 行 → {referrer_file}")
