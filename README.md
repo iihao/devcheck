@@ -14,7 +14,7 @@ DevCheck is a menu bar port map for macOS: it shows **who holds each port**, **w
   <img alt="swift" src="https://img.shields.io/badge/Swift-6-orange">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-green">
   <img alt="deps" src="https://img.shields.io/badge/dependencies-0-brightgreen">
-  <a href="https://github.com/iihao/devcheck/graphs/traffic"><img alt="visitors" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fiihao%2Fdevcheck%2Fmain%2Fmetrics%2Fbadge.json"></a>
+  <a href="https://github.com/iihao/devcheck/graphs/traffic"><img alt="visitors" src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fiihao%2Fdevcheck%2Fmain%2Fmetrics%2Fbadges%2Fdevcheck-visitors.json"></a>
 </p>
 
 <p align="center">
