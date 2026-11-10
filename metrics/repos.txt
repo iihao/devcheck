@@ -1,0 +1,6 @@
+# 需要统计访问量的仓库（一行一个，owner/repo）
+# 采样用 METRICS_TOKEN：traffic API 需要 push 权限，Actions 自带的 GITHUB_TOKEN 会 403
+iihao/honglou-atlas
+iihao/song-dynasty
+iihao/pi-agent-vscode
+iihao/devcheck

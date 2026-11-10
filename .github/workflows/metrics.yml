@@ -42,6 +42,13 @@ jobs:
           REPO: ${{ github.repository }}
         run: python3 scripts/track_metrics.py
 
+      # 同一个 PAT 能给 iihao 下所有仓库采样，所以这里一次性把 metrics/repos.txt
+      # 里的仓库都抓一遍，徽章文件统一生成在本仓库，各项目 README 引用它们。
+      - name: Sample other repos (metrics/repos.txt)
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: python3 scripts/sample_all_repos.py
+
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
