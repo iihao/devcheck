@@ -31,6 +31,14 @@ metrics/
 **已知局限**：官方只给 14 天窗口，所以「累计」是**已记录天数的每日去重值之和**，
 跨天的回访会被重复计数。真实 UV 一定 ≤ 这个数。
 
+## 想看数字
+
+```bash
+python3 scripts/sample_all_repos.py --report            # 只读，不联网不写文件
+GH_TOKEN=$(gh auth token) python3 scripts/sample_all_repos.py   # 立刻抓一次并更新徽章
+gh api repos/iihao/devcheck/traffic/popular/referrers   # 流量来源
+```
+
 ## 加一个新仓库
 
 1. 在 `metrics/repos.txt` 追加一行 `owner/repo`

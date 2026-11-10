@@ -69,8 +69,26 @@ def sample_with_retry(repo: str, tries: int = 3):
     return None
 
 
+def report(repos: list[str]) -> int:
+    """只读：不联网、不写文件，直接把已记录的数据打出来。"""
+    print(f"{'仓库':28} {'访客':>6} {'浏览':>6} {'天数':>5}  最近 7 天(访客)")
+    for repo in repos:
+        name = repo.split("/")[-1]
+        csv_path = CSV_DIR / f"{name}.csv"
+        uniques, views, days = summarize(csv_path)
+        recent = ""
+        if csv_path.exists():
+            with csv_path.open(newline="") as handle:
+                rows = list(csv.DictReader(handle))[-7:]
+            recent = " ".join(r["views_unique"] for r in rows)
+        print(f"{repo:28} {uniques:6} {views:6} {days:5}  {recent}")
+    return 0
+
+
 def main() -> int:
     repos = read_repos()
+    if "--report" in sys.argv[1:]:
+        return report(repos)
     if not repos:
         raise SystemExit("metrics/repos.txt 里没有仓库")
 
