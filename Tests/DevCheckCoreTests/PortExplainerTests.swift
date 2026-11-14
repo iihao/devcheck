@@ -73,4 +73,21 @@ final class PortExplainerTests: XCTestCase {
         let explanation = PortExplainer.explain(port: 5432, ports: ports)
         XCTAssertTrue(explanation.notes.contains { $0.contains("docker-proxy") })
     }
+
+    func testWhyJSONShape() throws {
+        let ports = [holder(5000, pid: 804, command: "ControlCenter",
+                            executable: "/System/Library/CoreServices/ControlCenter.app/Contents/MacOS/ControlCenter")]
+        let explanation = PortExplainer.explain(port: 5000, ports: ports)
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        let data = try encoder.encode(explanation)
+        let json = String(data: data, encoding: .utf8)!
+
+        XCTAssertTrue(json.contains("\"port\""))
+        XCTAssertTrue(json.contains("\"holders\""))
+        XCTAssertTrue(json.contains("\"notes\""))
+        XCTAssertTrue(json.contains("\"suggestions\""))
+    }
 }
+
