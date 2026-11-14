@@ -60,6 +60,7 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     private var timer: Timer?
     private var isRefreshing = false
     private var isMenuOpen = false
+    private var expandedProjectRoots: Set<String> = []
 
     final class PortBox: NSObject {
         let port: ListeningPort
@@ -211,18 +212,50 @@ final class StatusBarController: NSObject, NSMenuDelegate {
     private func addPortSections(to menu: NSMenu, snapshot: Snapshot) {
         let visible = snapshot.ports.filter { !$0.isNoise }
         let noise = snapshot.ports.filter(\.isNoise)
+        let maxPortsPerGroup = 5
 
         for group in groupedByProject(visible) {
             let title: String
+            let rootKey: String
             if let project = group.project {
                 title = "\(project.name) · \(project.kind.rawValue)"
+                rootKey = project.root
             } else {
                 title = L("未归类进程", "Unclassified")
+                rootKey = "\u{0}ungrouped"
             }
 
-            menu.addItem(disabledItem(title))
-            for port in group.ports {
+            let isExpanded = expandedProjectRoots.contains(rootKey)
+            let ports = group.ports
+            let collapsedCount = min(ports.count, maxPortsPerGroup)
+            let showCount = isExpanded ? ports.count : collapsedCount
+            let overflowCount = ports.count - collapsedCount
+            let hiddenCount = ports.count - showCount
+
+            let headerTitle = hiddenCount > 0
+                ? "\(title) (\(showCount)/\(ports.count))"
+                : title
+
+            let headerItem = disabledItem(headerTitle)
+            if hiddenCount > 0 {
+                headerItem.action = #selector(toggleProjectGroup(_:))
+                headerItem.target = self
+                headerItem.representedObject = rootKey as NSString
+            }
+            menu.addItem(headerItem)
+
+            for port in ports.prefix(showCount) {
                 menu.addItem(portMenuItem(for: port))
+            }
+
+            if overflowCount > 0 {
+                let moreTitle = isExpanded
+                    ? L("收起 \(overflowCount) 个", "Collapse \(overflowCount)")
+                    : L("… \(overflowCount) 更多", "… \(overflowCount) more")
+                let moreItem = NSMenuItem(title: moreTitle, action: #selector(toggleProjectGroup(_:)), keyEquivalent: "")
+                moreItem.target = self
+                moreItem.representedObject = rootKey as NSString
+                menu.addItem(moreItem)
             }
             menu.addItem(.separator())
         }
@@ -237,6 +270,16 @@ final class StatusBarController: NSObject, NSMenuDelegate {
             menu.addItem(item)
             menu.addItem(.separator())
         }
+    }
+
+    @objc private func toggleProjectGroup(_ sender: NSMenuItem) {
+        guard let rootKey = sender.representedObject as? String else { return }
+        if expandedProjectRoots.contains(rootKey) {
+            expandedProjectRoots.remove(rootKey)
+        } else {
+            expandedProjectRoots.insert(rootKey)
+        }
+        menuNeedsUpdate(menu)
     }
 
     /// 按项目分组，无项目的端口归到同一组
