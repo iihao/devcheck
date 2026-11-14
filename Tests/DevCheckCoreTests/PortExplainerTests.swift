@@ -67,10 +67,31 @@ final class PortExplainerTests: XCTestCase {
         XCTAssertTrue(explanation.suggestions.contains { $0.contains("System Settings") })
     }
 
-    func testDockerProxyIsExplained() {
+func testDockerProxyIsExplained() {
         let ports = [holder(5432, pid: 31, command: "docker-proxy",
                             executable: "/Applications/Docker.app/Contents/MacOS/com.docker.backend")]
         let explanation = PortExplainer.explain(port: 5432, ports: ports)
         XCTAssertTrue(explanation.notes.contains { $0.contains("docker-proxy") })
     }
+
+    func testOllamaOn11434IsExplained() {
+        let ports = [holder(11434, pid: 41, command: "ollama",
+                            executable: "/Applications/Ollama.app/Contents/MacOS/Ollama")]
+        let explanation = PortExplainer.explain(port: 11434, ports: ports)
+        XCTAssertTrue(explanation.notes.contains { $0.contains("Ollama") })
+        XCTAssertTrue(explanation.suggestions.contains { $0.contains("Ollama") })
+    }
+
+    func testBunIsExplained() {
+        let ports = [holder(3000, pid: 51, command: "bun", executable: "/opt/homebrew/bin/bun")]
+        let explanation = PortExplainer.explain(port: 3000, ports: ports)
+        XCTAssertTrue(explanation.notes.contains { $0.contains("Bun") })
+    }
+
+    func testDenoIsExplained() {
+        let ports = [holder(3000, pid: 52, command: "deno", executable: "/opt/homebrew/bin/deno")]
+        let explanation = PortExplainer.explain(port: 3000, ports: ports)
+        XCTAssertTrue(explanation.notes.contains { $0.contains("Deno") })
+    }
 }
+
