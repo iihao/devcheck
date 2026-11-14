@@ -254,9 +254,16 @@ enum CLI {
     // MARK: - devcheck why <port>
 
     private static func runWhy(_ arguments: [String]) async -> Int32 {
-        let numeric = arguments.compactMap { Int($0) }
+        var asJSON = false
+        var numericArgs: [String] = []
+        for argument in arguments {
+            if argument == "--json" || argument == "-j" { asJSON = true }
+            else { numericArgs.append(argument) }
+        }
+
+        let numeric = numericArgs.compactMap { Int($0) }
         guard let port = numeric.first, (1...65535).contains(port) else {
-            FileHandle.standardError.write(Data((L("用法：devcheck why <port>   例如 devcheck why 5000", "usage: devcheck why <port>   e.g. devcheck why 5000") + "\n").utf8))
+            FileHandle.standardError.write(Data((L("用法：devcheck why <port> [--json]   例如 devcheck why 5000", "usage: devcheck why <port> [--json]   e.g. devcheck why 5000") + "\n").utf8))
             return 2
         }
 
@@ -283,6 +290,11 @@ enum CLI {
         }
 
         let explanation = PortExplainer.explain(port: port, ports: snapshot.ports)
+
+        if asJSON {
+            printWhyJSON(explanation)
+            return 0
+        }
 
         print(L("端口 \(port)：\(explanation.holders.count) 个进程占用",
                 "Port \(port): \(explanation.holders.count) process(es) listening"))
@@ -328,13 +340,21 @@ enum CLI {
         }
     }
 
+    private static func printWhyJSON(_ explanation: PortExplanation) {
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
+        if let data = try? encoder.encode(explanation), let text = String(data: data, encoding: .utf8) {
+            print(text)
+        }
+    }
+
     private static func printUsage() {
         print(L("""
         DevCheck · 工程机体检 + 端口地图
 
         用法:
           devcheck                 启动菜单栏（默认）
-          devcheck why <port>      某个端口到底被谁占了、该怎么办
+          devcheck why <port> [--json]   某个端口到底被谁占了、该怎么办
           devcheck ports [选项]     列出监听端口
           devcheck doctor          人类可读的体检报告
           devcheck menu            纯文本预览菜单栏内容
@@ -352,7 +372,7 @@ enum CLI {
 
         Usage:
           devcheck                 start the menu bar app (default)
-          devcheck why <port>      who holds this port, and what to do about it
+          devcheck why <port> [--json]   who holds this port, and what to do about it
           devcheck ports [options] list listening ports
           devcheck doctor          human-readable health report
           devcheck menu            render the menu bar content as text
