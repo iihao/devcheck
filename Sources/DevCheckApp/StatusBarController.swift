@@ -227,7 +227,9 @@ final class StatusBarController: NSObject, NSMenuDelegate {
 
             let isExpanded = expandedProjectRoots.contains(rootKey)
             let ports = group.ports
-            let showCount = isExpanded ? ports.count : min(ports.count, maxPortsPerGroup)
+            let collapsedCount = min(ports.count, maxPortsPerGroup)
+            let showCount = isExpanded ? ports.count : collapsedCount
+            let overflowCount = ports.count - collapsedCount
             let hiddenCount = ports.count - showCount
 
             let headerTitle = hiddenCount > 0
@@ -246,10 +248,10 @@ final class StatusBarController: NSObject, NSMenuDelegate {
                 menu.addItem(portMenuItem(for: port))
             }
 
-            if hiddenCount > 0 {
+            if overflowCount > 0 {
                 let moreTitle = isExpanded
-                    ? L("收起 \(hiddenCount) 个", "Collapse \(hiddenCount)")
-                    : L("… \(hiddenCount) 更多", "… \(hiddenCount) more")
+                    ? L("收起 \(overflowCount) 个", "Collapse \(overflowCount)")
+                    : L("… \(overflowCount) 更多", "… \(overflowCount) more")
                 let moreItem = NSMenuItem(title: moreTitle, action: #selector(toggleProjectGroup(_:)), keyEquivalent: "")
                 moreItem.target = self
                 moreItem.representedObject = rootKey as NSString
