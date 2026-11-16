@@ -4,3 +4,5 @@ iihao/honglou-atlas
 iihao/song-dynasty
 iihao/pi-agent-vscode
 iihao/devcheck
+iihao/snake-cultivation
+iihao/chinese-classics-atlas
