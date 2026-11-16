@@ -29,6 +29,11 @@ star 只算自己名下、非 fork 的仓库；访客是上面各仓库 CSV 的�
 各有中英 / 明暗四种组合），**不再用 github-readme-stats**：那个公共实例经常 503
 （2026-11-16 实测 `/api` 与 `/api/top-langs` 全部 503），README 的图会裂开，
 而且 vercel.app 在部分网络下不可达。
+卡片画完会由 `Publish cards to iihao/iihao` 这一步直接提交到个人主页仓库的
+`metrics/` 下，README 用相对路径引用（`metrics/iihao-overview.svg`）——相对路径的图
+由 github.com 直接提供，而 `raw.githubusercontent.com` 在部分网络下不可达，图会裂。
+这一步用 `METRICS_TOKEN` 推送另一个仓库，失败只 warning 不影响采样。
+
 
 ## 口径（重要）
 
