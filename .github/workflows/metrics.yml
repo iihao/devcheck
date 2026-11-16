@@ -62,6 +62,32 @@ jobs:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
         run: python3 scripts/profile_card.py
 
+      # 卡片同步到个人主页仓库：README 里用相对路径引用，图由 github.com 直接提供。
+      # 引 raw.githubusercontent.com 的话在部分网络下不可达，README 的图会裂开。
+      - name: Publish cards to iihao/iihao
+        continue-on-error: true
+        env:
+          METRICS_TOKEN: ${{ secrets.METRICS_TOKEN }}
+        run: |
+          if [ -z "$METRICS_TOKEN" ]; then
+            echo "::warning::没有 METRICS_TOKEN，跳过卡片同步"
+            exit 0
+          fi
+          work=$(mktemp -d)
+          git clone --depth 1 "https://x-access-token:$METRICS_TOKEN@github.com/iihao/iihao.git" "$work/profile"
+          mkdir -p "$work/profile/metrics"
+          cp metrics/badges/iihao-*.svg "$work/profile/metrics/"
+          cd "$work/profile"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics
+          if git diff --cached --quiet; then
+            echo "卡片没有变化"
+            exit 0
+          fi
+          git commit -m "chore(cards): 同步数据卡片 $(date -u +%Y-%m-%d)"
+          git push
+
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
