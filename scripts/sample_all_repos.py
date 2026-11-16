@@ -111,12 +111,17 @@ def main() -> int:
         total_days = tm.merge_csv(csv_path, tm.TRAFFIC_FIELDS, ["date"], traffic)
         uniques, views, days = summarize(csv_path)
 
-        (BADGE_DIR / f"{name}-visitors.json").write_text(json.dumps(
-            {"schemaVersion": 1, "label": "访客", "message": str(uniques),
-             "color": "8c1f28"}, ensure_ascii=False) + "\n")
-        (BADGE_DIR / f"{name}-views.json").write_text(json.dumps(
-            {"schemaVersion": 1, "label": "浏览量", "message": str(views),
-             "color": "a8823c"}, ensure_ascii=False) + "\n")
+        # 中文 README 用 <name>-visitors.json，英文 README 用 <name>-visitors-en.json
+        for suffix, (visitor_label, view_label) in (
+            ("", ("访客", "浏览量")),
+            ("-en", ("visitors", "views")),
+        ):
+            (BADGE_DIR / f"{name}-visitors{suffix}.json").write_text(json.dumps(
+                {"schemaVersion": 1, "label": visitor_label, "message": str(uniques),
+                 "color": "8c1f28"}, ensure_ascii=False) + "\n")
+            (BADGE_DIR / f"{name}-views{suffix}.json").write_text(json.dumps(
+                {"schemaVersion": 1, "label": view_label, "message": str(views),
+                 "color": "a8823c"}, ensure_ascii=False) + "\n")
 
         rows.append((repo, uniques, views, total_days))
         print(f"{repo:32} 访客={uniques:5} 浏览={views:5} ({total_days} 天)")

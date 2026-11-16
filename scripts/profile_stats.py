@@ -8,7 +8,7 @@
 
 产出：
   metrics/profile.csv                  账号级逐日快照（stars / forks / repos / followers）
-  metrics/badges/iihao-stars.json       所有自有仓库的 star 之和
+  metrics/badges/iihao-stars.json       所有自有仓库的 star 之和（iihao-*-en.json 是英文标签版）
   metrics/badges/iihao-forks.json
   metrics/badges/iihao-repos.json       公开仓库数
   metrics/badges/iihao-followers.json
@@ -61,18 +61,31 @@ COLORS = {
     "views": "a8823c",
 }
 
+# 个人主页是双语的：中文 README 用 iihao-<key>.json，
+# 英文 README 用 iihao-<key>-en.json，数字相同、只有标签不同。
+LABELS = {
+    "stars": ("总 star", "stars"),
+    "forks": ("fork", "forks"),
+    "repos": ("仓库", "repos"),
+    "followers": ("followers", "followers"),
+    "visitors": ("访客", "visitors"),
+    "views": ("浏览量", "views"),
+}
 
-def badge(key: str, label: str, message: int | str) -> None:
+
+def badge(key: str, message: int | str) -> None:
     BADGE_DIR.mkdir(parents=True, exist_ok=True)
-    payload = {
-        "schemaVersion": 1,
-        "label": label,
-        "message": str(message),
-        "color": COLORS[key],
-    }
-    (BADGE_DIR / f"{OWNER}-{key}.json").write_text(
-        json.dumps(payload, ensure_ascii=False) + "\n"
-    )
+    zh_label, en_label = LABELS[key]
+    for suffix, label in (("", zh_label), ("-en", en_label)):
+        payload = {
+            "schemaVersion": 1,
+            "label": label,
+            "message": str(message),
+            "color": COLORS[key],
+        }
+        (BADGE_DIR / f"{OWNER}-{key}{suffix}.json").write_text(
+            json.dumps(payload, ensure_ascii=False) + "\n"
+        )
 
 
 def account_totals() -> dict[str, int]:
@@ -139,12 +152,12 @@ def main() -> int:
     }
     days = tm.merge_csv(PROFILE_CSV, PROFILE_FIELDS, ["date"], [row])
 
-    badge("stars", "总 star", totals["stars"])
-    badge("forks", "fork", totals["forks"])
-    badge("repos", "仓库", totals["repos"])
-    badge("followers", "followers", totals["followers"])
-    badge("visitors", "访客", uniques)
-    badge("views", "浏览量", views)
+    badge("stars", totals["stars"])
+    badge("forks", totals["forks"])
+    badge("repos", totals["repos"])
+    badge("followers", totals["followers"])
+    badge("visitors", uniques)
+    badge("views", views)
 
     print(f"stars={totals['stars']} forks={totals['forks']} repos={totals['repos']} "
           f"followers={totals['followers']} → {PROFILE_CSV}（{days} 天记录）")
