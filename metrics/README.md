@@ -22,6 +22,13 @@ metrics/
 账号级徽章由 `scripts/profile_stats.py` 生成（`iihao-stars` / `iihao-forks` /
 `iihao-repos` / `iihao-followers` / `iihao-visitors` / `iihao-views`），
 star 只算自己名下、非 fork 的仓库；访客是上面各仓库 CSV 的累加。
+每个徽章都有 `-en` 英文标签版，给个人主页的英文 README 用。
+
+个人主页的「数据」卡片是 `scripts/profile_card.py` 画的 SVG
+（`iihao-overview*.svg` 数字 + 常用语言、`iihao-activity*.svg` 近一年提交热力图，
+各有中英 / 明暗四种组合），**不再用 github-readme-stats**：那个公共实例经常 503
+（2026-11-16 实测 `/api` 与 `/api/top-langs` 全部 503），README 的图会裂开，
+而且 vercel.app 在部分网络下不可达。
 
 ## 口径（重要）
 
