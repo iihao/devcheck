@@ -56,6 +56,12 @@ jobs:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
         run: python3 scripts/profile_stats.py
 
+      # 个人主页的「数据」卡片：自己画 SVG，不依赖 github-readme-stats。
+      - name: Draw profile cards (iihao/iihao)
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: python3 scripts/profile_card.py
+
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
