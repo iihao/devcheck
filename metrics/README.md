@@ -13,9 +13,15 @@ metrics/
 ├── repos/<name>.csv          # 每个仓库逐日 views / uniques / clones
 ├── badges/<name>-visitors.json   # 独立访客徽章（shields endpoint 格式）
 ├── badges/<name>-views.json      # 浏览量徽章
+├── profile.csv               # 账号级逐日快照（stars / forks / repos / followers）
+├── badges/iihao-stars.json   # 账号级徽章，给个人主页 README 用
 ├── traffic.csv               # devcheck 自身的原始数据（旧的单仓库采样）
 └── repo.csv / stars.csv / referrers.csv
 ```
+
+账号级徽章由 `scripts/profile_stats.py` 生成（`iihao-stars` / `iihao-forks` /
+`iihao-repos` / `iihao-followers` / `iihao-visitors` / `iihao-views`），
+star 只算自己名下、非 fork 的仓库；访客是上面各仓库 CSV 的累加。
 
 ## 口径（重要）
 
@@ -37,6 +43,7 @@ metrics/
 python3 scripts/sample_all_repos.py --report            # 只读，不联网不写文件
 GH_TOKEN=$(gh auth token) python3 scripts/sample_all_repos.py   # 立刻抓一次并更新徽章
 gh api repos/iihao/devcheck/traffic/popular/referrers   # 流量来源
+python3 scripts/profile_stats.py --report               # 账号级数字（只读）
 ```
 
 ## 加一个新仓库

@@ -49,6 +49,13 @@ jobs:
           GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
         run: python3 scripts/sample_all_repos.py
 
+      # 账号级数字（总 star / 访客 / 浏览）给个人主页 iihao/iihao 的 README 用，
+      # 口径见 scripts/profile_stats.py 的 docstring。
+      - name: Aggregate profile stats (iihao/iihao)
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN || secrets.GITHUB_TOKEN }}
+        run: python3 scripts/profile_stats.py
+
       - name: Commit if changed
         run: |
           git config user.name "github-actions[bot]"
