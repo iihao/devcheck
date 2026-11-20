@@ -68,9 +68,20 @@ public enum PortExplainer {
                 "22 是「远程登录（SSH）」端口。",
                 "Port 22 is SSH (Remote Login)."
             ),
-            hint: (
+hint: (
                 "如果你没主动开 SSH，去 系统设置 → 通用 → 共享 检查。",
                 "If you did not enable SSH, check System Settings → General → Sharing."
+            )
+        ),
+        11434: KnownPort(
+            commands: ["ollama"],
+            note: (
+                "11434 是 Ollama 大模型服务的默认端口，通常由后台常驻进程占用。",
+                "Port 11434 is Ollama LLM service default, usually held by a background daemon."
+            ),
+            hint: (
+                "不需要时可在 Ollama 设置里关闭，或把服务换到别的端口。",
+                "Turn it off in Ollama settings if not needed, or move your service to another port."
             )
         ),
     ]
@@ -89,7 +100,13 @@ public enum PortExplainer {
             "Docker 容器的端口映射（真实进程在容器里，结束它不会停止容器）",
             "Docker port mapping — the real process lives inside the container; killing this does not stop it"
         ),
-        "rapportd": ("Handoff / 接力 相关守护进程", "Handoff / Continuity daemon"),
+"rapportd": ("Handoff / 接力 相关守护进程", "Handoff / Continuity daemon"),
+        "bun": ("Bun 运行时", "Bun runtime"),
+        "deno": ("Deno 运行时", "Deno runtime"),
+        "ollama": ("Ollama 大模型服务", "Ollama LLM service"),
+        "gunicorn": ("Gunicorn Python WSGI 服务器", "Gunicorn Python WSGI server"),
+        "uvicorn": ("Uvicorn Python ASGI 服务器", "Uvicorn Python ASGI server"),
+        "php-fpm": ("PHP-FPM 进程", "PHP-FPM process"),
     ]
 
     /// 常见开发端口 → 说明
@@ -104,7 +121,12 @@ public enum PortExplainer {
         5174: ("Vite 第二个实例（5173 被占用时会自动 +1）", "Second Vite instance (auto +1 when 5173 is taken)"),
         8000: ("Django / Python http.server 默认端口", "Django / Python http.server default"),
         8080: ("通用 HTTP 代理 / Tomcat 默认端口", "Generic HTTP proxy / Tomcat default"),
-        9000: ("PHP-FPM / SonarQube 等", "PHP-FPM / SonarQube and friends"),
+9000: ("PHP-FPM / SonarQube 等", "PHP-FPM / SonarQube and friends"),
+        9200: ("Elasticsearch 默认端口", "Elasticsearch default"),
+        11434: ("Ollama 默认端口", "Ollama default"),
+        4873: ("Verdaccio 默认端口", "Verdaccio default"),
+        27017: ("MongoDB 默认端口", "MongoDB default"),
+        9092: ("Kafka / JMX 默认端口", "Kafka / JMX default"),
     ]
 
     public static func explain(port: Int, ports: [ListeningPort]) -> PortExplanation {
